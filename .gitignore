@@ -1,1 +1,13 @@
+# General
+.env
+
+# Python
+.venv
+__pycache__
+instance
+
+# JS/TS
+node_modules
+
+# Nix
 .direnv
