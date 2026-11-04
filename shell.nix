@@ -9,6 +9,7 @@ pkgs.mkShell {
 
     # JS/TS Tooling
     nodejs_24
+    typescript-language-server
   ];
 
   env = {
