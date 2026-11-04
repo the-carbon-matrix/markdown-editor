@@ -20,7 +20,6 @@ with app.app_context():
 
     if not security.datastore.find_user(email=admin_email):
         admin = security.datastore.create_user(
-            name="Admin",
             username="admin",
             email=admin_email,
             password=admin_password,
