@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template
 from flask_security import auth_required, roles_accepted
 
+from .admin import admin_bp
+
 main = Blueprint("main", __name__)
+main.register_blueprint(admin_bp, url_prefix="/admin")
 
 
 @main.route("/")
