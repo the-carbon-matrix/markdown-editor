@@ -3,7 +3,7 @@ from flask_security import auth_required, roles_accepted
 
 from .admin import admin_bp
 
-main = Blueprint("main", __name__)
+main = Blueprint("main", __name__, url_prefix="/api")
 main.register_blueprint(admin_bp, url_prefix="/admin")
 
 
