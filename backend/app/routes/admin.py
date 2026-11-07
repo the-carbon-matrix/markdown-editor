@@ -1,3 +1,5 @@
+from curses import use_default_colors
+
 from flask import Blueprint
 from flask_security import roles_required
 from sqlalchemy.exc import SQLAlchemyError
@@ -40,6 +42,22 @@ def disable_user(id):
     except SQLAlchemyError as e:
         db.session.rollback()
         return {"error": str(e)}, 500
+
+
+@admin_bp.route("/get_all_users", methods=["GET"])
+@roles_required("admin")
+def get_all_users():
+    users = db.session.query(User).all()
+    return [
+        {
+            "username": user.username,
+            "email": user.email,
+            "id": user.id,
+            "is_active": user.is_active,
+            "created_at": user.create_datetime,
+        }
+        for user in users
+    ]
 
 
 @admin_bp.route("/delete_user/<id>", methods=["DELETE"])

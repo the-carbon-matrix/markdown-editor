@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from flask import Blueprint, current_app, request
 from flask_security import auth_required, current_user, roles_required
@@ -6,9 +7,28 @@ from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 
 from app.extensions import db
-from app.models import Note
+from app.models import Note, User
 
 user_bp = Blueprint("user", __name__)
+
+
+@user_bp.route("/<id>/get_user", methods=["GET"])
+@auth_required()
+def get_user(id):
+    if (current_user.id != int(id)) and (not current_user.has_role("admin")):
+        return "You are not this user", 401
+    else:
+        user = db.session.query(User).filter(User.id == id).first()
+        if not user:
+            return "User doesn't exist", 404
+
+        return {
+            "username": user.username,
+            "email": user.email,
+            "id": user.id,
+            "is_active": user.is_active,
+            "created_at": user.create_datetime,
+        }
 
 
 @user_bp.route("/create_note", methods=["POST"])
@@ -24,7 +44,11 @@ def create_note():
     os.makedirs(folder, exist_ok=True)
 
     file_exists = os.path.exists(file_path)
-    db_query = db.session.query(Note).filter(Note.title == title)
+    db_query = (
+        db.session.query(Note)
+        .filter(Note.title == title)
+        .filter(Note.user_id == user_id)
+    )
     db_entry_exists = db_query.first() is not None
     if file_exists and db_entry_exists:
         return "File already exists.", 409
@@ -36,7 +60,7 @@ def create_note():
     new_note = Note(title=title, user_id=user_id, file_path=file_path)
     try:
         if db_entry_exists and (not file_exists):
-            # Someone was messing with the static files, delete the previous DB entry and allow for the creation of a new one
+            # Someone was messing with the data files, delete the previous DB entry and allow for the creation of a new one
             db_query.delete()
         db.session.add(new_note)
         db.session.commit()
@@ -61,7 +85,7 @@ def get_note(id):
     else:
         file_path = db_entry.file_path
         if not os.path.exists(file_path):
-            # Someone was messing with the static files, delete the DB entry and send a 404
+            # Someone was messing with the data files, delete the DB entry and send a 404
             try:
                 db_query.delete()
                 db.session.commit()
@@ -108,6 +132,60 @@ def get_all_notes(user_id):
     except SQLAlchemyError as e:
         db.session.rollback()
         return str(e), 500
+
+
+@user_bp.route("/edit_note/<id>", methods=["PATCH"])
+@roles_required("editor")
+def edit_note(id):
+    data = request.json
+    db_query = db.session.query(Note).filter(Note.id == id)
+    db_entry = db_query.first()
+
+    if db_entry is None:
+        return "Note not found.", 404
+    elif db_entry.user_id != current_user.id:
+        return "This note isn't yours.", 401
+    else:
+        file_path = db_entry.file_path
+        try:
+            # Someone was messing with data files and the note doesn't exist
+            if not os.path.exists(file_path):
+                db_query.delete()
+                db.session.commit()
+                return "Note not found.", 404
+
+            title = data.get("title")
+            content = data.get("content")
+
+            uniq = (
+                db.session.query(Note)
+                .filter(Note.title == title)
+                .filter(Note.user_id == current_user.id)
+                .first()
+                is None
+            )
+
+            if not uniq:
+                return "File already exists.", 409
+
+            if title and uniq:
+                folder = os.path.join(
+                    current_app.config["NOTES_DIR"], str(current_user.id)
+                )
+                new_file_path = os.path.join(folder, secure_filename(f"{title}.md"))
+                shutil.move(file_path, new_file_path)
+
+                db_query.update({"title": title, "file_path": new_file_path})
+                db.session.commit()
+
+            if content:
+                with open(file_path, "w") as f:
+                    f.write(content)
+
+            return id
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return str(e), 500
 
 
 @user_bp.route("/delete_note/<id>", methods=["DELETE"])

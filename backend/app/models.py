@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 
 from flask_security.models import sqla
-from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy import ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -24,9 +24,11 @@ class User(Model, sqla.FsUserMixin):
 class Note(Model):
     __tablename__ = "notes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
     file_path: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
     user = relationship("User", back_populates="notes")
+
+    __table_args__ = (UniqueConstraint("title", "user_id", name="uq_user_note_title"),)
