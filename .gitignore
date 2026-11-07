@@ -5,6 +5,7 @@
 .venv
 __pycache__
 instance
+data
 
 ## JS/TS
 # Logs

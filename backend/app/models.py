@@ -24,6 +24,7 @@ class User(Model, sqla.FsUserMixin):
 class Note(Model):
     __tablename__ = "notes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     file_path: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
 
