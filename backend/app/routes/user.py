@@ -48,6 +48,68 @@ def create_note():
         return str(e), 500
 
 
+@user_bp.route("/get_note/<id>", methods=["GET"])
+@auth_required()
+def get_note(id):
+    db_query = db.session.query(Note).filter(Note.id == id)
+    db_entry = db_query.first()
+
+    if db_entry is None:
+        return "Note not found.", 404
+    elif (db_entry.user_id != current_user.id) and (not current_user.has_role("admin")):
+        return "This note isn't yours.", 401
+    else:
+        file_path = db_entry.file_path
+        if not os.path.exists(file_path):
+            # Someone was messing with the static files, delete the DB entry and send a 404
+            try:
+                db_query.delete()
+                db.session.commit()
+                return "Note not found.", 404
+            except SQLAlchemyError as e:
+                # Make sure the file is blank
+                with open(file_path, "w") as f:
+                    f.write("")
+                db.session.rollback()
+                return str(e), 500
+
+        content = ""
+        with open(file_path, "r") as f:
+            content = f.read()
+
+        return {
+            "id": id,
+            "user_id": current_user.id,
+            "title": db_entry.title,
+            "content": content,
+        }
+
+
+@user_bp.route("/<user_id>/get_all_notes", methods=["GET"])
+@auth_required()
+def get_all_notes(user_id):
+    if (current_user.id != int(user_id)) and (not current_user.has_role("admin")):
+        return "Forbidden", 401
+
+    db_query = db.session.query(Note).filter(Note.user_id == user_id)
+    notes = db_query.all()
+    output = []
+    try:
+        for note in notes:
+            # Delete the invalid notes whose file doesn't exist
+            if not os.path.exists(note.file_path):
+                db_query.filter(Note.id == note.id).delete()
+            else:
+                output.append({"id": note.id, "title": note.title})
+
+        db.session.commit()
+        return output
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return str(e), 500
+
+
 @user_bp.route("/delete_note/<id>", methods=["DELETE"])
 @auth_required()
 def delete_note(id):
