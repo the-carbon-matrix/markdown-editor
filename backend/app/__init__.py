@@ -30,7 +30,6 @@ def create_app():
     app.config["SECURITY_RECOVERABLE"] = False
     app.config["SECURITY_CHANGEABLE"] = False
     app.config["SECURITY_CONFIRMABLE"] = False
-    app.config["SECURITY_LOGOUT_METHODS"] = ["GET", "POST"]
 
     app.config["NOTES_DIR"] = str(BASE_DIR / "data" / "notes")
     os.makedirs(app.config["NOTES_DIR"], exist_ok=True)
