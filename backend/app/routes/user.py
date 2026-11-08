@@ -14,7 +14,7 @@ user_bp = Blueprint("user", __name__)
 
 
 @user_bp.route("/<id>/get_user", methods=["GET"])
-@auth_required()
+@auth_required("token")
 def get_user(id):
     if (current_user.id != int(id)) and (not current_user.has_role("admin")):
         return "You are not this user", 401
@@ -34,6 +34,7 @@ def get_user(id):
 
 @user_bp.route("/create_note", methods=["POST"])
 @roles_required("editor")
+@auth_required("token")
 def create_note():
     data = request.json
     title = data.get("title")
@@ -74,7 +75,7 @@ def create_note():
 
 
 @user_bp.route("/get_note/<id>", methods=["GET"])
-@auth_required()
+@auth_required("token")
 def get_note(id):
     db_query = db.session.query(Note).filter(Note.id == id)
     db_entry = db_query.first()
@@ -113,7 +114,7 @@ def get_note(id):
 
 
 @user_bp.route("/<user_id>/get_all_notes", methods=["GET"])
-@auth_required()
+@auth_required("token")
 def get_all_notes(user_id):
     if (current_user.id != int(user_id)) and (not current_user.has_role("admin")):
         return "Forbidden", 401
@@ -146,6 +147,7 @@ def get_all_notes(user_id):
 
 @user_bp.route("/edit_note/<id>", methods=["PATCH"])
 @roles_required("editor")
+@auth_required("token")
 def edit_note(id):
     data = request.json
     db_query = db.session.query(Note).filter(Note.id == id)
@@ -207,7 +209,7 @@ def edit_note(id):
 
 
 @user_bp.route("/delete_note/<id>", methods=["DELETE"])
-@auth_required()
+@auth_required("token")
 def delete_note(id):
     db_query = db.session.query(Note).filter(Note.id == id)
     db_entry = db_query.first()

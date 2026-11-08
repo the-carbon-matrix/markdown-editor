@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from flask import Flask
+from flask_cors import CORS
 from flask_security import FSQLALiteUserDatastore
 
 from .extensions import db, security
@@ -15,6 +16,8 @@ def create_app():
     app = Flask(__name__)
 
     BASE_DIR = Path(__file__).resolve().parent
+
+    app.config["SECURITY_API_ENABLED_METHODS"] = ["token"]
 
     app.config["SQLALCHEMY_ENGINES"] = {
         "default": os.environ.get("SQLALCHEMY_DATABASE_URI")
@@ -40,5 +43,7 @@ def create_app():
 
     app.register_blueprint(main)
     setup_signals(app, user_datastore)
+
+    CORS(app, origins=[os.environ.get("FRONTEND_URL", "localhost:3000")])
 
     return app

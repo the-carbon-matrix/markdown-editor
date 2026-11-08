@@ -1,7 +1,5 @@
-from curses import use_default_colors
-
 from flask import Blueprint
-from flask_security import roles_required
+from flask_security import auth_required, roles_required
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import db
@@ -12,6 +10,7 @@ admin_bp = Blueprint("admin", __name__)
 
 @admin_bp.route("/activate_user/<id>", methods=["PATCH"])
 @roles_required("admin")
+@auth_required("token")
 def enable_user(id):
     try:
         user_query = db.session.query(User).filter(User.id == id)
@@ -29,6 +28,7 @@ def enable_user(id):
 
 @admin_bp.route("/deactivate_user/<id>", methods=["PATCH"])
 @roles_required("admin")
+@auth_required("token")
 def disable_user(id):
     try:
         user_query = db.session.query(User).filter(User.id == id)
@@ -46,6 +46,7 @@ def disable_user(id):
 
 @admin_bp.route("/get_all_users", methods=["GET"])
 @roles_required("admin")
+@auth_required("token")
 def get_all_users():
     users = db.session.query(User).all()
     return [
@@ -62,6 +63,7 @@ def get_all_users():
 
 @admin_bp.route("/delete_user/<id>", methods=["DELETE"])
 @roles_required("admin")
+@auth_required("token")
 def delete_user(id):
     try:
         user_query = db.session.query(User).filter(User.id == id)
