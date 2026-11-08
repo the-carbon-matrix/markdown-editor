@@ -1,27 +1,28 @@
 from datetime import UTC, datetime
 
-from flask_security.models import sqla
+from flask_security.models import fsqla_v4 as fsqla
 from sqlalchemy import ForeignKey, Integer, String, UniqueConstraint
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .extensions import db
+
+fsqla.FsModels.set_db_info(db)  # pyright: ignore[reportPrivateImportUsage]
 
 
-class Model(DeclarativeBase):
-    pass
-
-
-sqla.FsModels.set_db_info(base_model=Model)
-
-
-class Role(Model, sqla.FsRoleMixin):
+class Role(db.Model, fsqla.FsRoleMixin):
     __tablename__ = "role"
 
 
-class User(Model, sqla.FsUserMixin):
+class FsRefreshTracker(db.Model, fsqla.FsRefreshTrackerMixin):
+    __tablename__ = "refresh_tracker"
+
+
+class User(db.Model, fsqla.FsUserMixin):
     __tablename__ = "user"
     notes: Mapped[list["Note"]] = relationship(back_populates="user")
 
 
-class Note(Model):
+class Note(db.Model):
     __tablename__ = "notes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)

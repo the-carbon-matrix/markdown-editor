@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from flask_security.utils import hash_password
 
 from app import create_app
-from app.models import Model
 from app.extensions import db, security
 
 load_dotenv()
@@ -13,7 +12,7 @@ with app.app_context():
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com")
     admin_password = hash_password(os.environ.get("ADMIN_PASSWORD", "password"))
 
-    Model.metadata.create_all(db.engine)
+    db.Model.metadata.create_all(db.engine)
 
     editor_role = security.datastore.find_or_create_role("editor")
     admin_role = security.datastore.find_or_create_role("admin")
