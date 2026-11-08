@@ -2,10 +2,12 @@
 pkgs.mkShell {
   packages = with pkgs; [
     # Python Tooling
-    python313
-    python313Packages.pip
+    (python313.withPackages (python-pkgs:
+      with python-pkgs; [
+        uv
+        ruff
+      ]))
     basedpyright
-    ruff
 
     # JS/TS Tooling
     nodejs_24
