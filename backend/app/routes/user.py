@@ -1,5 +1,6 @@
 import os
 import shutil
+from datetime import UTC, datetime
 
 from flask import Blueprint, current_app, request
 from flask_security import auth_required, current_user, roles_required
@@ -106,6 +107,8 @@ def get_note(id):
             "user_id": current_user.id,
             "title": db_entry.title,
             "content": content,
+            "created_at": db_entry.created_at,
+            "modified_at": db_entry.modified_at,
         }
 
 
@@ -124,7 +127,14 @@ def get_all_notes(user_id):
             if not os.path.exists(note.file_path):
                 db_query.filter(Note.id == note.id).delete()
             else:
-                output.append({"id": note.id, "title": note.title})
+                output.append(
+                    {
+                        "id": note.id,
+                        "title": note.title,
+                        "created_at": note.created_at,
+                        "modified_at": note.modified_at,
+                    }
+                )
 
         db.session.commit()
         return output
@@ -175,12 +185,20 @@ def edit_note(id):
                 new_file_path = os.path.join(folder, secure_filename(f"{title}.md"))
                 shutil.move(file_path, new_file_path)
 
-                db_query.update({"title": title, "file_path": new_file_path})
+                db_query.update(
+                    {
+                        "title": title,
+                        "file_path": new_file_path,
+                        "modified_at": datetime.now(UTC),
+                    }
+                )
                 db.session.commit()
 
             if content:
                 with open(file_path, "w") as f:
                     f.write(content)
+                db_query.update({"modified_at": datetime.now(UTC)})
+                db.session.commit()
 
             return id
         except SQLAlchemyError as e:

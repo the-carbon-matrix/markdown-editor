@@ -27,6 +27,7 @@ class Note(Model):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     file_path: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    modified_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
     user = relationship("User", back_populates="notes")
