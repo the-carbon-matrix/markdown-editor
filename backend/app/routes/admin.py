@@ -61,6 +61,22 @@ def get_all_users():
     ]
 
 
+@admin_bp.route("/get_user/<id>", methods=["GET"])
+@roles_required("admin")
+@auth_required("token")
+def get_user(id):
+    user = db.session.query(User).filter(User.id == id).first()
+    if not user:
+        return "User doesn't exist", 404
+    return {
+        "username": user.username,
+        "email": user.email,
+        "id": user.id,
+        "is_active": user.is_active,
+        "created_at": user.create_datetime,
+    }
+
+
 @admin_bp.route("/delete_user/<id>", methods=["DELETE"])
 @roles_required("admin")
 @auth_required("token")

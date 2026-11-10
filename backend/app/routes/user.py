@@ -8,28 +8,22 @@ from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 
 from app.extensions import db
-from app.models import Note, User
+from app.models import Note
 
 user_bp = Blueprint("user", __name__)
 
 
-@user_bp.route("/<id>/get_user", methods=["GET"])
+@user_bp.route("/profile", methods=["GET"])
 @auth_required("token")
-def get_user(id):
-    if (current_user.id != int(id)) and (not current_user.has_role("admin")):
-        return "You are not this user", 401
-    else:
-        user = db.session.query(User).filter(User.id == id).first()
-        if not user:
-            return "User doesn't exist", 404
-
-        return {
-            "username": user.username,
-            "email": user.email,
-            "id": user.id,
-            "is_active": user.is_active,
-            "created_at": user.create_datetime,
-        }
+def get_user():
+    return {
+        "username": current_user.username,
+        "email": current_user.email,
+        "id": current_user.id,
+        "is_active": current_user.is_active,
+        "created_at": current_user.create_datetime,
+        "roles": [role.name for role in current_user.roles],
+    }
 
 
 @user_bp.route("/create_note", methods=["POST"])

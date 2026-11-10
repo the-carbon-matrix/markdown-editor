@@ -12,6 +12,10 @@ pkgs.mkShell {
     # JS/TS Tooling
     nodejs_24
     typescript-language-server
+    vue-language-server
+    vscode-langservers-extracted
+    emmet-language-server
+    prettier
   ];
 
   env = {
