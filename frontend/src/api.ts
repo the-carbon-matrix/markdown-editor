@@ -7,7 +7,12 @@ interface RequestOptions {
   headers?: HeadersInit;
 }
 
-const AUTH_PATHS = ["/login", "/logout", "/register", "/refresh-token"];
+const AUTH_PATHS = [
+  "/backend/login",
+  "/backend/logout",
+  "/backend/register",
+  "/backend/refresh-token",
+];
 
 const send = (
   path: string,
@@ -66,6 +71,7 @@ const request = async <T,>(
   const isAuthRoute: boolean = AUTH_PATHS.some((p) => path.startsWith(p));
 
   if (res.status === 401 && !retried && !isAuthRoute) {
+    console.log("Refreshing!");
     try {
       refreshPromise ??= auth.refresh().finally(() => {
         refreshPromise = null;

@@ -31,22 +31,29 @@ export const useAuthStore = defineStore("auth", {
     isAuthenticated: (s): boolean => !!s.accessToken,
   },
   actions: {
-    async login(email: string, username: string, password: string) {
+    async getCSRFToken() {
       this.csrfToken = (
-        await api.get<CSRFResponse>("/login")
+        await api.get<CSRFResponse>("/backend/login")
       ).response.csrf_token;
+    },
+    async login(email: string, username: string, password: string) {
+      await this.getCSRFToken();
       const data = await api.post<AuthTokenReponse & CSRFResponse>(
-        "/login?include_auth_token",
+        "/backend/login?include_auth_token",
         { email, username, password, csrf_token: this.csrfToken },
       );
       this.accessToken = data.response.user.authentication_token;
-      this.user = await api.get("/api/user/profile");
+      this.user = await api.get("/backend/api/user/profile");
     },
     async refresh(): Promise<string> {
-      const data = await api.post<AuthTokenReponse>("/refresh-token", {
+      if (!this.csrfToken) {
+        await this.getCSRFToken();
+      }
+      const data = await api.post<AuthTokenReponse>("/backend/refresh-token", {
         csrf_token: this.csrfToken,
       });
       this.accessToken = data.response.user.authentication_token;
+      this.user = await api.get("/backend/api/user/profile");
       return this.accessToken;
     },
     async restoreSession() {
@@ -59,7 +66,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async logout() {
       try {
-        await api.post("/logout");
+        await api.post("/backend/logout");
       } finally {
         this.accessToken = null;
         this.user = null;
