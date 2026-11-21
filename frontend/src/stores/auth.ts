@@ -36,7 +36,15 @@ export const useAuthStore = defineStore("auth", {
         await api.get<CSRFResponse>("/backend/login")
       ).response.csrf_token;
     },
-    async login(email: string, username: string, password: string) {
+    async login(
+      email: string | null,
+      username: string | null,
+      password: string,
+    ) {
+      if (!email && !username) {
+        throw new Error("Either email or username must be provided");
+      }
+
       await this.getCSRFToken();
       const data = await api.post<AuthTokenReponse & CSRFResponse>(
         "/backend/login?include_auth_token",
@@ -44,6 +52,16 @@ export const useAuthStore = defineStore("auth", {
       );
       this.accessToken = data.response.user.authentication_token;
       this.user = await api.get("/backend/api/user/profile");
+    },
+    async register(email: string, username: string, password: string) {
+      await this.getCSRFToken();
+      await api.post<AuthTokenReponse & CSRFResponse>("/backend/register", {
+        email,
+        username,
+        password,
+        password_confirm: password,
+        csrf_token: this.csrfToken,
+      });
     },
     async refresh(): Promise<string> {
       if (!this.csrfToken) {

@@ -33,7 +33,7 @@ router.beforeEach(async (to) => {
     return { path: "/login", query: { redirect: to.fullPath } };
   }
 
-  if (to.name === "login" && auth.isAuthenticated) {
+  if (to.path === "/login" && auth.isAuthenticated) {
     return { path: "/" };
   }
 
