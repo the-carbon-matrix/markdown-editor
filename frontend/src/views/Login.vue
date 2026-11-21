@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Mail, UserRound, KeyRound } from "@lucide/vue";
+
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
@@ -11,6 +13,11 @@ const username = ref("");
 const password = ref("");
 
 async function doLogin() {
+  if (!email.value && !username.value) {
+    alert("Please enter either email or username.");
+    return;
+  }
+
   try {
     await auth.login(email.value, username.value, password.value);
     router.push("/");
@@ -21,14 +28,43 @@ async function doLogin() {
 </script>
 
 <template>
-  <h1>Login Page</h1>
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1>Login Page</h1>
 
-  <form @submit.prevent="doLogin">
-    <input v-model="email" type="email" placeholder="email" />
-    <input v-model="username" type="text" placeholder="username" />
-    <input v-model="password" type="password" placeholder="password" />
-    <button type="submit">Login</button>
-  </form>
+      <form @submit.prevent="doLogin">
+        <div class="input-grp">
+          <label for="email"><Mail color="#333333" /></label>
+          <input v-model="email" id="email" type="email" placeholder="Email" />
+        </div>
+
+        <p class="subtitle">Or</p>
+
+        <div class="input-grp">
+          <label for="username"><UserRound color="#333333" /></label>
+          <input
+            v-model="username"
+            id="username"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+
+        <div class="input-grp">
+          <label for="username"><KeyRound color="#333333" /></label>
+          <input
+            v-model="password"
+            id="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped src="../assets/form.css"></style>
