@@ -167,6 +167,7 @@ def edit_note(id):
                 db.session.query(Note)
                 .filter(Note.title == title)
                 .filter(Note.user_id == current_user.id)
+                .filter(Note.id != id)
                 .first()
                 is None
             )

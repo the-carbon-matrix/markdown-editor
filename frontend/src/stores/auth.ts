@@ -78,7 +78,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         await this.refresh();
       } catch {
-        /* not logged in */
+        await this.logout();
       }
       this.ready = true;
     },
