@@ -47,6 +47,7 @@
   align-items: center;
   justify-content: center;
   margin: 0;
+  border-right: 1px solid #dddddd;
 }
 
 .input-grp input {
@@ -56,6 +57,12 @@
   border: none;
   outline: none;
   font-size: 15px;
+}
+
+.auth-card hr {
+  border: 0;
+  border-top: 1px solid #dddddd;
+  width: 100%;
 }
 
 .auth-card button {

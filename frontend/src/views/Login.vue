@@ -38,7 +38,7 @@ async function doLogin() {
           <input v-model="email" id="email" type="email" placeholder="Email" />
         </div>
 
-        <p class="subtitle">Or</p>
+        <p class="subtitle">OR</p>
 
         <div class="input-grp">
           <label for="username"><UserRound color="#333333" /></label>
@@ -49,6 +49,8 @@ async function doLogin() {
             placeholder="Username"
           />
         </div>
+
+        <hr />
 
         <div class="input-grp">
           <label for="username"><KeyRound color="#333333" /></label>
