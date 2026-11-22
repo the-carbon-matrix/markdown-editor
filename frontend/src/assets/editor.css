@@ -1,36 +1,55 @@
-.entry {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.dashboard {
   width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
   flex-direction: row;
-  padding: 0;
+}
+
+.editor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  align-items: center;
+}
+
+.options {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  align-items: center;
+  padding-left: 20px;
+  background-color: #dddddd;
   border-bottom: 1px solid #111111;
 }
 
-.entry p {
-  color: #dddddd;
+.options input {
+  height: fit-content;
   font-size: 16px;
-  flex: 1;
-  display: flex;
-  align-items: center;
+  padding: 4px;
   font-family: monospace;
 }
 
-.entry button {
-  background-color: inherit;
-  border: none;
-  color: #dddddd;
-  width: 48px;
-  height: 48px;
-  justify-self: flex-end;
+.options button:first-of-type {
+  margin-left: auto;
+}
+
+.options button {
+  height: 70px;
+  min-width: 70px;
+  font-size: 18px;
   margin: 0;
+  background-color: inherit;
+  border: inherit;
 }
 
-.entry button.delete:hover {
-  background-color: #ef3915;
+.options button:hover {
+  background-color: #eeeeee;
 }
 
-.entry button.open:hover {
-  background-color: #55789b;
+.options button.save:hover {
+  background-color: #4eba5a;
+  color: #ffffff;
 }

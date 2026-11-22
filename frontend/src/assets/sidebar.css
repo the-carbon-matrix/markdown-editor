@@ -66,3 +66,40 @@
   height: 100%;
   margin-bottom: auto;
 }
+
+.entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: row;
+  padding: 0;
+  border-bottom: 1px solid #111111;
+}
+
+.entry p {
+  color: #dddddd;
+  font-size: 16px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+}
+
+.entry button {
+  background-color: inherit;
+  border: none;
+  color: #dddddd;
+  width: 48px;
+  height: 48px;
+  justify-self: flex-end;
+  margin: 0;
+}
+
+.entry button.delete:hover {
+  background-color: #ef3915;
+}
+
+.entry button.open:hover {
+  background-color: #55789b;
+}
