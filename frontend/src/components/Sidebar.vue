@@ -27,11 +27,15 @@ const doLogout = async () => {
   <div class="sidebar">
     <h1>{{ title || "Sidebar" }}</h1>
     <hr />
+    <div class="slot-list">
+      <slot name="entries"></slot>
+    </div>
     <div class="user-info">
       <p><AtSign style="margin-right: 10px" />{{ username }}</p>
-      <button @click="doLogout"><SquareArrowRightExit /></button>
+      <slot name="button"></slot>
+      <button class="logout" @click="doLogout"><SquareArrowRightExit /></button>
     </div>
   </div>
 </template>
 
-<style scoped src="../assets/sidebar.css"></style>
+<style src="../assets/sidebar.css"></style>

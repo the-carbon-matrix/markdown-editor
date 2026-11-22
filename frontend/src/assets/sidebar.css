@@ -22,7 +22,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: auto;
   justify-self: flex-end;
   padding: 16px 0 16px 16px;
   height: 60px;
@@ -51,5 +50,19 @@
 }
 
 .user-info button:hover {
+  background-color: #55789b;
+}
+
+.user-info button.logout:hover {
   background-color: #ef3915;
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 75%;
+  height: 100%;
+  margin-bottom: auto;
 }
