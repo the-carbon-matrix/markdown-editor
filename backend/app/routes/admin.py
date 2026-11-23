@@ -114,6 +114,7 @@ def get_user(id):
 
 @admin_bp.route("/delete_user/<id>", methods=["DELETE"])
 @roles_required("admin")
+@auth_required("token")
 def delete_user(id):
     try:
         user_query = db.session.query(User).filter(User.id == id)
