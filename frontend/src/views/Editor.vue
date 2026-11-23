@@ -16,6 +16,7 @@ interface Note {
   modified_at: string;
   id: number;
   title: string;
+  user_id: number;
 }
 
 const notes = ref([] as Note[]);
@@ -110,6 +111,14 @@ const switchNote = async (id: number | undefined) => {
   original_title.value = currentNote.value?.title;
   new_title.value = original_title.value;
   noteIsOpen.value = true;
+
+  document.querySelectorAll(".entry").forEach((el) => {
+    el.classList.remove("selected");
+    console.log(el.textContent);
+    if (el.textContent.toLowerCase() === original_title.value?.toLowerCase()) {
+      el.classList.add("selected");
+    }
+  });
 };
 
 const saveNote = async () => {
@@ -122,6 +131,17 @@ const saveNote = async () => {
     original_content.value = new_content.value;
     original_title.value = new_title.value;
     await getAllNotes();
+
+    document.querySelectorAll(".entry").forEach((el) => {
+      el.classList.remove("selected");
+      console.log(el.textContent);
+      if (
+        el.textContent.toLowerCase() === original_title.value?.toLowerCase()
+      ) {
+        el.classList.add("selected");
+      }
+    });
+
     alert("Note successfully saved!");
   } catch (e) {
     alert("Failed to save note, please check console for more info.");

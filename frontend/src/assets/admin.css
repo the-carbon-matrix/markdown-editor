@@ -1,0 +1,168 @@
+.dashboard {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.admin {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  align-items: center;
+}
+
+.options {
+  width: 100%;
+  display: flex;
+  height: 70px;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #dddddd;
+  border-bottom: 1px solid #111111;
+}
+
+.input-grp {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #111111;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.input-grp label {
+  width: 48px;
+  min-width: 48px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-right: 1px solid #111111;
+}
+
+.input-grp input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.editors-view,
+.notes-view {
+  width: 100%;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 25px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #222222;
+}
+
+.table-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #888888;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+thead {
+  background-color: #f8fafc;
+}
+
+th {
+  padding: 16px 20px;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+  padding: 17px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+td button {
+  border: none;
+  padding: 4px;
+  height: 35px;
+  width: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn {
+  background-color: #fff1f2;
+  color: #e11d48;
+}
+
+.delete-btn:hover {
+  background-color: #e11d48;
+  color: #ffffff;
+}
+
+.preview-btn {
+  background-color: #cccccc;
+  color: #222222;
+}
+
+.preview-btn:hover {
+  background-color: #222222;
+  color: #cccccc;
+}
+
+dialog {
+  width: 70%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+dialog div {
+  width: 100%;
+  margin-bottom: auto;
+}
+
+dialog button {
+  background-color: #cccccc;
+  color: #222222;
+  border: none;
+  padding: 4px;
+  height: 35px;
+  font-size: 16px;
+}
+
+dialog button:hover {
+  background-color: #222222;
+  color: #cccccc;
+}

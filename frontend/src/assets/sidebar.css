@@ -84,16 +84,20 @@
   display: flex;
   align-items: center;
   font-family: monospace;
+  margin-left: 10px;
 }
 
-.entry button {
+.entry button,
+.icon {
   background-color: inherit;
   border: none;
   color: #dddddd;
   width: 48px;
   height: 48px;
-  justify-self: flex-end;
   margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .entry button.delete:hover {
@@ -102,4 +106,8 @@
 
 .entry button.open:hover {
   background-color: #55789b;
+}
+
+.selected {
+  background-color: #212121;
 }
