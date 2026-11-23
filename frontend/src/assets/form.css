@@ -20,6 +20,12 @@
   color: #333333;
 }
 
+.auth-card p {
+  text-align: center;
+  color: #444444;
+  font-size: 16px;
+}
+
 .auth-card form {
   display: flex;
   flex-direction: column;

@@ -28,7 +28,9 @@ const doRegister = async () => {
     );
     router.push("/login");
   } catch (e) {
-    alert("Error occured!");
+    alert(
+      "Error occured during registration! Please check if username and email are unique",
+    );
     console.log(e);
   }
 };
@@ -84,6 +86,7 @@ const doRegister = async () => {
         </div>
         <button type="submit">Register</button>
       </form>
+      <p>Or <a href="/login">Login</a> if you already have an account</p>
     </div>
   </div>
 </template>

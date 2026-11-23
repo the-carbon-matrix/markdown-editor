@@ -22,6 +22,7 @@ async function doLogin() {
     await auth.login(email.value, username.value, password.value);
     router.push("/");
   } catch (e) {
+    alert("Error occured! Please check if the admin has verified you or not.");
     console.error(e);
   }
 }
@@ -65,6 +66,7 @@ async function doLogin() {
 
         <button type="submit">Login</button>
       </form>
+      <p>Or <a href="/register">Register</a> if you're a new user.</p>
     </div>
   </div>
 </template>
