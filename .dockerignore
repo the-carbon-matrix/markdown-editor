@@ -1,0 +1,32 @@
+## Git
+.git
+.gitignore
+
+## Python
+.venv
+__pycache__
+**/instance
+**/data
+
+## JS/TS
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+*.tsbuildinfo
+
+*.timestamp-*-*.mjs
+
+## Nix
+.direnv

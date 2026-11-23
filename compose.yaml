@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      dockerfile: backend/Dockerfile
+
+    container_name: markdown-backend
+
+    ports:
+      - "5000:5000"
+
+    restart: unless-stopped
+
+  frontend:
+    build:
+      dockerfile: frontend/Dockerfile
+
+    container_name: markdown-frontend
+
+    network_mode: host
+
+    depends_on:
+      - backend
+
+    restart: unless-stopped
