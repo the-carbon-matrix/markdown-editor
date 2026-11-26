@@ -22,7 +22,9 @@ async function doLogin() {
     await auth.login(email.value, username.value, password.value);
     router.push("/");
   } catch (e) {
-    alert("Error occured! Please check if the admin has verified you or not.");
+    alert(
+      "Error occured! Please check if the user exists, if the credentials are correct and if the admin has verified you or not.",
+    );
     console.error(e);
   }
 }
